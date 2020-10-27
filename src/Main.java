@@ -1,29 +1,30 @@
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
         public static void main(String args[]) throws IOException {
             FileOutputStream fout = null;
-            BufferedOutputStream bout = null;
 
             try {
-                fout = new FileOutputStream("testout.dat");
-                bout = new BufferedOutputStream(fout);
-                String s = "Welcome to java.";
-                byte b[] = s.getBytes();
-                bout.write(b);
-                String s1 = "Welcome to java 1.";
-                byte b2[] = s1.getBytes();
-                bout.write(b2);
-                bout.flush();
-            } catch (IOException ex) {
+                fout = new FileOutputStream("userlist.dat");
+                ObjectOutputStream obs = new ObjectOutputStream(fout);
+                List<Student> list = new ArrayList<>();
+                list.add(new Student(1, "Khanh Duy"));
+                list.add(new Student(2, "Quang Duy"));
+                obs.writeObject(list);
+                obs.close();
+                fout.close();
+
+
+                FileInputStream fis = new FileInputStream("userlist.dat");
+                ObjectInputStream ois = new ObjectInputStream(fis);
+                List<Student> list1 =(List<Student>) ois.readObject();
+                System.out.println(list.get(1).toString());
+            } catch (IOException | ClassNotFoundException ex) {
                 ex.printStackTrace();
             } finally {
-                bout.close();
-                fout.close();
             }
-
             System.out.println("success!");
         }
 }
